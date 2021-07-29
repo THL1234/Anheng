@@ -1,16 +1,21 @@
 <template>
   <div class="loginBox">
     <h2>login</h2>
-    <form action="">
+    <form action="" @submit.prevent="onSubmit">
       <div class="item">
-        <input type="text" v-model="user" required>
-        <label for="">userName</label>
+        <input type="text" v-model="info.user">
+        <label for="">用户名</label>
       </div>
       <div class="item">
-        <input type="password" v-model="pass" required>
-        <label for="">password</label>
+        <input type="password" v-model="info.pass">
+        <label for="">密码</label>
       </div>
-      <button class="btn">submit
+    <!--  <div class="item" style="width: 160px!important;">
+        <input type="text" v-model="code">
+        <label for="">验证码</label>
+        <img :src="catpChaurl">
+      </div>-->
+      <button class="btn" @click="loadBtn()">submit
         <span></span>
         <span></span>
         <span></span>
@@ -21,25 +26,42 @@
 </template>
 
 <script>
+  import textAPI from '../request/api.js'
   export default {
+    inject:['reload'],
     name:'login',
     data(){
       return{
-        user:'',
-        pass:''
+        info:{
+          user:'',
+          pass:'',
+        },
+        code:'',
+        catpChaurl:''
       }
     },
     methods:{
-      loadBtn() {
+      loadBtn(){
         // 我暂时就不模拟了，直接取
-        let getUserRole = this.user === 'admin' ? 'admin' : 'user'
-        localStorage.setItem('userRole', getUserRole)
-        // window.location.href="/main"
-        this.$router.push({
-          path: '/main'
-        })
+          if(this.info.user.length==0||this.info.pass.length==0){
+            this.$message.error("请输入完整用户名和密码");
+          }else{
+            //axios发送请求
+            self=this;
+            textAPI.LoginAPI(this.info).then(res=>{
+              //存储token到localStorage
+              var token = res.data.data.username+res.data.data.phone;
+              window.localStorage.setItem('token',token);
+              setTimeout(function (){
+                self.$router.replace('/all');
+                location.reload();
+              }, 800)
+          })
+
+          }
+        },
+      onSubmit(){return false;}
       }
-    }
   };
 </script>
 
@@ -62,7 +84,6 @@
 
   body {
     height: 100vh;
-/*    background: linear-gradient(#135784, #3e6894);*/
     background: url(../assets/back.jpg);
     display: flex;
     justify-content: center;
@@ -73,7 +94,7 @@
 
   .loginBox {
     width: 400px;
-    height: 364px;
+    height: 340px;
     background-color: #0c1622;
     margin-left: 0px;
     margin-top: -100px;
@@ -93,7 +114,7 @@
   .item {
     height: 45px;
     border-bottom: 1px solid #fff;
-    margin-bottom: 40px;
+    margin-bottom: 25px;
     position: relative;
   }
 
@@ -108,7 +129,7 @@
   .item input:focus+label,
   .item input:valid+label {
     top: 0px;
-    font-size: 2px;
+    font-size: 16px;
   }
 
   .item label {
