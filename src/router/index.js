@@ -5,6 +5,10 @@ import all from '../components/All.vue'
 import NotFound from '../view/Error.vue'
 import tabledata from '../components/Table.vue'
 import dataAnalysis from '../components/DataAnalysis.vue'
+import alldata from '../view/Alldata.vue'
+import persondata from '../view/PersonData.vue'
+import demand from '../components/Demand.vue'
+import sanfang from '../view/Sanfang.vue'
 Vue.use(Router)
 
 const router = new Router({
@@ -14,9 +18,11 @@ const router = new Router({
       path: '/login',
       name: 'login',
       component: login,
-      meta: {
-        isRequired: false
-      }
+    },
+    {
+      path:'/sanfang',
+      name:'sanfang',
+      component:sanfang
     },
    {
       path: '/all',
@@ -32,6 +38,21 @@ const router = new Router({
           path:'/all/dataAnalysis',
           name:'dataAnalysis',
           component:dataAnalysis
+        },
+        {
+          path:'/all/alldata',
+          name:'alldata',
+          component:alldata
+        },
+        {
+          path:'/all/persondata',
+          name:'persondata',
+          component:persondata
+        },
+        {
+          path:'/all/demand',
+          name:'demand',
+          component:demand
         },
         {
           path:'/all',
@@ -53,7 +74,9 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if (to.path === '/login') {
     next();
-  } else {
+  } else if(to.path==='/sanfang'){
+    next();
+  } else{
     let token = localStorage.getItem('token');
     if (token === 'null' || token === '') {
       next('/login');

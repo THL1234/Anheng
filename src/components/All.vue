@@ -5,8 +5,8 @@
       <el-container class="app_content">
         <!--头部区域-->
         <el-header style="box-shadow: 0 1px 2px rgba(205,205,205,205);height: 70px;">
-          <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" style="margin-top: 20px;margin-left: 1150px;"></el-avatar>
-           <div style="float:right;margin-top: 30px;margin-right: 30px;">
+          <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" style="margin-top: 20px;margin-left: 1180px;"></el-avatar>
+           <div style="float:right;margin-top: 30px;margin-right: 0px;">
              <el-dropdown>
               <span class="el-dropdown-link">
                 用户名<i class="el-icon-arrow-down el-icon--right"></i>

@@ -23,11 +23,11 @@
               <span class="MenuText">数据列表</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="1-1"><span class="MenuText">个人数据列表</span></el-menu-item>
-              <el-menu-item index="1-2"><span class="MenuText">整体数据列表</span></el-menu-item>
+              <el-menu-item index="/all/persondata"><span class="MenuText">个人数据列表</span></el-menu-item>
+              <el-menu-item index="/all/alldata"><span class="MenuText">整体数据列表</span></el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-          <el-menu-item index="4">
+          <el-menu-item index="/all/demand">
             <i class="el-icon-s-data"></i>
             <span slot="title" class="MenuText">请求管理</span>
           </el-menu-item>
@@ -53,8 +53,8 @@
 
 <style scoped>
   .el-menu-vertical-demo{
-    height: 1600px;
-    width:200px;
+    height: 800px;
+    width:195px;
   }
 
   .MenuText{

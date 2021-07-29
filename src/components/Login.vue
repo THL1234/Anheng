@@ -1,27 +1,36 @@
 <template>
-  <div class="loginBox">
-    <h2>login</h2>
-    <form action="" @submit.prevent="onSubmit">
-      <div class="item">
-        <input type="text" v-model="info.user">
-        <label for="">用户名</label>
-      </div>
-      <div class="item">
-        <input type="password" v-model="info.pass">
-        <label for="">密码</label>
-      </div>
-    <!--  <div class="item" style="width: 160px!important;">
-        <input type="text" v-model="code">
-        <label for="">验证码</label>
-        <img :src="catpChaurl">
-      </div>-->
-      <button class="btn" @click="loadBtn()">submit
+  <div id="back">
+    <br><br><br><br><br><br><br><br><br><br>
+    <div class="loginBox">
+      <h2>login</h2>
+      <form action="" @submit.prevent="onSubmit">
+        <div class="item">
+          <input type="text" v-model="info.user">
+          <label for="">用户名</label>
+        </div>
+        <div class="item">
+          <input type="password" v-model="info.pass">
+          <label for="">密码</label>
+        </div>
+      <!--  <div class="item" style="width: 160px!important;">
+          <input type="text" v-model="code">
+          <label for="">验证码</label>
+          <img :src="catpChaurl">
+        </div>-->
+        <button class="btn" @click="loadBtn()">登录
         <span></span>
         <span></span>
         <span></span>
         <span></span>
-      </button>
-    </form>
+      </button><br>
+        <div style="margin-left: 76px;margin-top:35px;">
+          <a v-on:mouseover="changelong()" v-on:mouseout="changeshort()" @click="transfer()">还没账号?请求第三方登录</a>
+          <div style="margin-right:60px;">
+            <div ref="line" id="line"></div><br><br>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -37,10 +46,11 @@
           pass:'',
         },
         code:'',
-        catpChaurl:''
+        backgroundImage:'url(../assets/bg.jpg)'
       }
     },
     methods:{
+      //登录事件
       loadBtn(){
         // 我暂时就不模拟了，直接取
           if(this.info.user.length==0||this.info.pass.length==0){
@@ -54,18 +64,34 @@
               window.localStorage.setItem('token',token);
               setTimeout(function (){
                 self.$router.replace('/all');
-                location.reload();
               }, 800)
           })
 
           }
         },
-      onSubmit(){return false;}
-      }
+
+      //阻止表单提交
+        onSubmit(){
+          return false;
+        },
+
+        changelong(){
+          this.$refs.line.style.width='183px';
+        },
+
+        changeshort(){
+          this.$refs.line.style.width='0px';
+        },
+
+        transfer(){
+          this.$router.push('/sanfang');
+        }
+      },
   };
+
 </script>
 
-<style>
+<style scoped>
   * {
     margin: 0;
     padding: 0;
@@ -73,6 +99,14 @@
 
   a {
     text-decoration: none;
+    color:#01ddff;
+  }
+
+  #back{
+    width:100%;
+    height: 1000px;
+    margin-top: -200px;
+    background: url("../assets/back.jpg") no-repeat;
   }
 
   input,
@@ -81,23 +115,16 @@
     border: 0;
     outline: none;
   }
-
-  body {
-    height: 100vh;
-    background: url(../assets/back.jpg);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    color: #03e9f4;
+  label{
+    color:#01ddff;
   }
 
   .loginBox {
     width: 400px;
-    height: 340px;
+    height: 380px;
     background-color: #0c1622;
-    margin-left: 0px;
-    margin-top: -100px;
+    margin-left: 600px;
+    margin-top: 160px;
     border-radius: 10px;
     box-shadow: 0 15px 25px 0 rgba(0, 0, 0, .6);
     padding: 40px;
@@ -141,8 +168,8 @@
 
   .btn {
     padding: 10px 20px;
-    margin-top: 30px;
-    margin-right: 240px;
+    margin-top: 10px;
+    margin-left:20px;
     color: #03e9f4;
     position: relative;
     overflow: hidden;
@@ -210,7 +237,6 @@
   }
 
   @keyframes line3 {
-
     50%,
     100% {
       left: -100%;
@@ -231,5 +257,14 @@
     100% {
       top: -100%;
     }
+  }
+
+  #line{
+    margin:0px auto;    /* 指产生的组件自适应居中,就产生了从中间到两边的动态效果 */
+    margin-top: 10px;
+    height: 2px;
+    width:0px;
+    background-color: #01ddff;
+    transition: width 0.2s ;
   }
   </style>
