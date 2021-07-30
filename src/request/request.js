@@ -5,7 +5,7 @@ import router from '../router/index.js'
 
 //创建一个单例
 const instance = axios.create({
-  baseURL:"10.11.32.195",
+  baseURL:"10.11.20.195",
   timeout:5000,
   withCredentials:true
 })
@@ -33,16 +33,14 @@ instance.interceptors.request.use(
 //响应拦截
 instance.interceptors.response.use(
   res=>{
-    if(res.status&&res.status==200){
-      if(res.data.code==401||res.data.code==403){
-        Message.error({message:res.data.message})
-        return;
+    if( res.status&&res.status == 200){
+      if(res.data.code === 401 || res.data.code === 403){
+         Message.error({message: res.data.message});
+         return;
+      } else if (res.data.code === 200) {
+        Message.success({ message: res.data.message })
       }
-      else if(res.data.code==200) {
-        Message.success({message: res.data.message})
       }
-      }
-
     return res
   },error=>{
     if(error.response.code==504||error.response.code==404){

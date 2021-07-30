@@ -1,14 +1,95 @@
 <template>
-  <div>个人数据列表</div>
+  <div>
+    <el-table
+      :data="tableData"
+      border
+      style="width: 100%;margin-top: 30px;">
+      <el-table-column
+        prop="name"
+        label="姓名"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="coordinate"
+        label="坐标"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="weekmodule"
+        label="一星期访问模块">
+      </el-table-column>
+
+
+      <el-table-column label="操作" width="180">
+        <template slot-scope="scope">
+          <el-button type="primary" @click="handleEditClick(scope.$index,scope.row)"  size="mini">编辑</el-button>
+          <el-button type="danger" size="mini" @click="handleDelClick(scope.$index,scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
 </template>
 
-<script>
-  export default{
-    name:'personaldata',
 
+<script>
+  export default {
+    name: "personaldata",
+    data() {
+      return{
+        tableData:[{
+          name:'唐海林',
+          coordinate:1312211,
+          weekmodule:'海南海口'
+        },{
+          name:'唐海林',
+          coordinate:1312211,
+          weekmodule:'海南海口'
+        }],
+        input:'',
+        editBox:false,
+        user:{},
+        editIndex:"",
+      }
+    },
+    methods:{
+      handleEditClick(index,row){
+        console.log(row);
+        this.editBox = true
+        this.user = row
+        this.editIndex = index
+      },
+      // eslint-disable-next-line no-unused-vars
+      handleDelClick(index,row){
+        this.$confirm('此操作将删除该用户, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.tableData.splice(index,1)
+          this.$message({showClose: true, message: "删除成功", type: 'success'});
+        })
+      },
+      handleEditUser(){
+        this.tableData.splice(this.editIndex,1,this.user)
+        this.$message({showClose: true, message: "修改成功", type: 'success'});
+        this.editBox = false
+      },
+      handleAddClick(){
+        this.addBox = true
+      },
+      getdata(){
+        axios.get('/msg1').then(function(response){
+          this.tableData=response.data
+          console.log(typeof(response.data.data[1]))
+          console.log(response.data.data[1])
+        })
+      }
+    }
   }
+
 </script>
 
-<style>
+<style scoped>
 
 </style>
+

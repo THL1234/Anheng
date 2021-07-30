@@ -17,11 +17,9 @@ Mock.mock('http://localhost:8081/test/city', 'get', () => {
   return {cityList: citys}
 })
 // post请求,带参数,参数会在data中返回,会返回url,type,body三个参数,可以把data打印出来看看
-Mock.mock('10.11.32.195/login', 'post', (data) => {
+Mock.mock('10.11.20.195/login', 'post', (data) => {
   // 请求传过来的参数在body中,传回的是json字符串,需要转义一下
   const info= JSON.parse(data.body);
-  console.log(info.user);
-  console.log(info.pass);
   return {
       code:200,
       message:"登录成功",
@@ -31,6 +29,30 @@ Mock.mock('10.11.32.195/login', 'post', (data) => {
         role:"老板",
         perms:"省长"
     }
+  }
+})
+
+Mock.mock('10.11.20.195/sanfang', 'post', (data) => {
+  // 请求传过来的参数在body中,传回的是json字符串,需要转义一下
+  return {
+    code:200,
+    message:"登录成功",
+    data:{
+      username:"THL",
+      phone:123456,
+      role:"第三方用户",
+      perms:"省长"
+    }
+  }
+})
+
+Mock.mock('10.11.20.195/Login_Data/GetLogin_NumByAddress', 'get', (data) => {
+  // 请求传过来的参数在body中,传回的是json字符串,需要转义一下
+  const info= JSON.parse(data.body);
+  console.log(info);
+  return {
+    code:200,
+    message:"登录成功",
   }
 })
 

@@ -2,27 +2,17 @@
   <div id="back">
     <br><br><br><br><br><br><br><br><br><br>
     <div class="loginBox">
-      <h2>login</h2>
+      <h1>login</h1>
       <form action="" @submit.prevent="onSubmit">
         <div class="item">
-          <input type="text" v-model="info.user">
-          <label for="">用户名</label>
+          <span>用户名</span>
+          <el-input v-model="info.phone" placeholder="请输入用户名"></el-input>
         </div>
         <div class="item">
-          <input type="password" v-model="info.pass">
-          <label for="">密码</label>
+          <span>密码</span>
+          <el-input  type="password" v-model="info.password" placeholder="请输入密码"></el-input>
         </div>
-      <!--  <div class="item" style="width: 160px!important;">
-          <input type="text" v-model="code">
-          <label for="">验证码</label>
-          <img :src="catpChaurl">
-        </div>-->
-        <button class="btn" @click="loadBtn()">登录
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </button><br>
+        <el-button class="btn" type="primary" @click="loadBtn()" plain>登录</el-button><br>
         <div style="margin-left: 76px;margin-top:35px;">
           <a v-on:mouseover="changelong()" v-on:mouseout="changeshort()" @click="transfer()">还没账号?请求第三方登录</a>
           <div style="margin-right:60px;">
@@ -42,8 +32,8 @@
     data(){
       return{
         info:{
-          user:'',
-          pass:'',
+          phone:'',
+          password:'',
         },
         code:'',
         backgroundImage:'url(../assets/bg.jpg)'
@@ -53,20 +43,22 @@
       //登录事件
       loadBtn(){
         // 我暂时就不模拟了，直接取
-          if(this.info.user.length==0||this.info.pass.length==0){
+         /* console.log(returnCitySN);*/
+          if(this.info.phone.length==0||this.info.password.length==0){
             this.$message.error("请输入完整用户名和密码");
           }else{
             //axios发送请求
             self=this;
             textAPI.LoginAPI(this.info).then(res=>{
               //存储token到localStorage
-              var token = res.data.data.username+res.data.data.phone;
-              window.localStorage.setItem('token',token);
+              var token = res.data.data.token;
+              var role="老板";
+              window.localStorage.setItem('token',token)
+              window.localStorage.setItem('role',role);
               setTimeout(function (){
                 self.$router.replace('/all');
               }, 800)
           })
-
           }
         },
 
@@ -99,31 +91,26 @@
 
   a {
     text-decoration: none;
-    color:#01ddff;
+    color:#2a2a2a;
   }
 
   #back{
     width:100%;
     height: 1000px;
     margin-top: -200px;
-    background: url("../assets/back.jpg") no-repeat;
+    background-color: aliceblue;
+   /* background-image: url(../assets/canvas.jpg);*/
   }
 
-  input,
-  button {
-    background: transparent;
-    border: 0;
-    outline: none;
-  }
   label{
-    color:#01ddff;
+    color:#2a2a2a;
   }
 
   .loginBox {
     width: 400px;
     height: 380px;
-    background-color: #0c1622;
-    margin-left: 600px;
+    background-color: #ffffff;
+    margin-left: 580px;
     margin-top: 160px;
     border-radius: 10px;
     box-shadow: 0 15px 25px 0 rgba(0, 0, 0, .6);
@@ -131,32 +118,33 @@
     box-sizing: border-box;
   }
 
-  h2 {
+  h1 {
     text-align: center;
-    color: aliceblue;
+    color: #2a2a2a;
     margin-bottom: 30px;
     font-family: 'Courier New', Courier, monospace;
   }
 
   .item {
+    display:flex;
     height: 45px;
     border-bottom: 1px solid #fff;
     margin-bottom: 25px;
     position: relative;
   }
 
-  .item input {
-    width: 100%;
-    height: 100%;
-    color: #fff;
-    padding-top: 20px;
-    box-sizing: border-box;
+  .item span{
+    width:70px;
+    margin-top: 10px;
+    margin-left: -20px;
   }
 
-  .item input:focus+label,
-  .item input:valid+label {
-    top: 0px;
-    font-size: 16px;
+  .item el-input {
+    width: 200px;
+    height: 50px;
+    color: #2a2a2a;
+    padding-top: 20px;
+    box-sizing: border-box;
   }
 
   .item label {
@@ -166,97 +154,10 @@
     transition: all 0.5s linear;
   }
 
-  .btn {
-    padding: 10px 20px;
-    margin-top: 10px;
-    margin-left:20px;
-    color: #03e9f4;
-    position: relative;
-    overflow: hidden;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    left: 35%;
-  }
-
-  .btn:hover {
-    border-radius: 5px;
-    color: #fff;
-    background: #03e9f4;
-    box-shadow: 0 0 5px 0 #03e9f4,
-    0 0 25px 0 #03e9f4,
-    0 0 50px 0 #03e9f4,
-    0 0 100px 0 #03e9f4;
-    transition: all 1s linear;
-  }
-
-  .btn>span {
-    position: absolute;
-  }
-
-  .btn>span:nth-child(1) {
-    width: 100%;
-    height: 2px;
-    background: -webkit-linear-gradient(left, transparent, #03e9f4);
-    left: -100%;
-    top: 0px;
-    animation: line1 1s linear infinite;
-  }
-
-  @keyframes line1 {
-
-    50%,
-    100% {
-      left: 100%;
-    }
-  }
-
-  .btn>span:nth-child(2) {
-    width: 2px;
-    height: 100%;
-    background: -webkit-linear-gradient(top, transparent, #03e9f4);
-    right: 0px;
-    top: -100%;
-    animation: line2 1s 0.25s linear infinite;
-  }
-
-  @keyframes line2 {
-
-    50%,
-    100% {
-      top: 100%;
-    }
-  }
-
-  .btn>span:nth-child(3) {
-    width: 100%;
-    height: 2px;
-    background: -webkit-linear-gradient(left, #03e9f4, transparent);
-    left: 100%;
-    bottom: 0px;
-    animation: line3 1s 0.75s linear infinite;
-  }
-
-  @keyframes line3 {
-    50%,
-    100% {
-      left: -100%;
-    }
-  }
-
-  .btn>span:nth-child(4) {
-    width: 2px;
-    height: 100%;
-    background: -webkit-linear-gradient(top, transparent, #03e9f4);
-    left: 0px;
-    top: 100%;
-    animation: line4 1s 1s linear infinite;
-  }
-
-  @keyframes line4 {
-    50%,
-    100% {
-      top: -100%;
-    }
+  .btn{
+    margin-left: 120px;
+    width:80px;
+    height: 40px;
   }
 
   #line{

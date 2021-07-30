@@ -5,9 +5,10 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import echarts from 'echarts';
   import 'echarts/map/js/china.js';
+  import textAPI from '../request/api.js';
+  import axios from 'axios';
   import {provinceNameArr, cityNameData, provinceNameChineseToEng, cityNameChineseToEng} from '../libs/geoNameDictionary.js'; // 引入省市对应英文名字
 
   export default {
@@ -40,26 +41,18 @@
           code: '',
         },
 
+        init:[{
+          provinceName:"浙江",
+          cityName:[
+            "绍兴","杭州"
+          ]
+        },
+          {
+            provinceName:"江苏",
+            cityName:["南京","苏州"]
+          }],
+
         data: [
-          {name: '无锡', value: 71},
-          {name: '杭州', value: 84},
-          {name: '泰安', value: 112},
-          {name: '南京', value: 67},
-          {name: '石家庄', value: 147},
-          {name: '莱芜', value: 148},
-          {name: '常德', value: 152},
-          {name: '保定', value: 153},
-          {name: '湘潭', value: 154},
-          {name: '金华', value: 157},
-          {name: '岳阳', value: 169},
-          {name: '长沙', value: 175},
-          {name: '衢州', value: 177},
-          {name: '廊坊', value: 193},
-          {name: '菏泽', value: 194},
-          {name: '合肥', value: 229},
-          {name: '武汉', value: 273},
-          {name: '大庆', value: 279},
-          {name: '昆山', value: 300},
         ],
         geoCoordMap: {
           '海门':[121.15,31.89],
@@ -255,8 +248,17 @@
         },
       }
     },
-    methods: {
 
+    created(){
+     textAPI.MapAPI().then(res => {
+       console.log(res.data.data.city);
+       localStorage.setItem('city', JSON.stringify((res.data.data.city)))
+       // this.data = res.data.data.city
+       console.log(12312, res.data.data.city)
+     })
+    },
+
+    methods: {
       // 判断一个城市是否在这个省内
       cityIsInclude(provinceEngName, cityName, cityNameEng) {
         let cities = cityNameData[`cityName_${provinceEngName}`]
@@ -333,13 +335,16 @@
             itemStyle: {
               normal: {
                 areaColor: 'rgb(32, 39, 75)',
-                borderColor: '#111'
+                borderColor: '#3d6aff'
               },
               emphasis: {
                 show: true,
-                areaColor: 'rgb(14, 28, 60)',
+                areaColor: '#3d6aff',
               }
             },
+            itemStyle: {
+              areaColor: '#eeeeee' // 地图区域的颜色
+            }
             // emphasis: {
             //   show: false,
             // },
@@ -366,7 +371,7 @@
               },
               itemStyle: {
                 normal: {
-                  color: '#00CF8B'
+                  color: '#3d6aff'
                 }
               }
             },
@@ -398,7 +403,7 @@
               // },
               itemStyle: {
                 normal: {
-                  color: '#00CF8B',
+                  color: '#3d6aff',
                   // shadowBlur: 10,
                   // shadowColor: '#333'
                 }
@@ -551,12 +556,9 @@
         })
       },
     },
-
     mounted() {
+      this.data = JSON.parse(localStorage.getItem('city'))
       this.chinaConfigure();
-    },
-    created() {
-
     },
     beforeDestroy() {
       if (!this.echart) {

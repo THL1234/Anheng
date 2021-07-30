@@ -54,7 +54,7 @@ const router = new Router({
           name:'demand',
           component:demand
         },
-        {
+       {
           path:'/all',
           redirect:'/all/table'
         },
@@ -75,7 +75,7 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/login') {
     next();
   } else if(to.path==='/sanfang'){
-    next();
+     next();
   } else{
     let token = localStorage.getItem('token');
     if (token === 'null' || token === '') {
