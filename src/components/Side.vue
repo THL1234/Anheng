@@ -70,6 +70,15 @@
               name:"请求管理",
               path:"/all/demand",
               icon:"el-icon-s-data"
+            },{
+               name:"个人行为分布图",
+               path:"/all/dandian",
+               icon:"el-icon-s-data"
+            },
+            {
+              name:"轨迹图",
+              path:"/all/guiji",
+              icon:"el-icon-s-data"
             }
           ],
             //渲染包含二级菜单的项
@@ -107,7 +116,7 @@
 
 <style scoped>
   .el-menu-vertical-demo{
-    height: 800px;
+    height: 722px;
     width:195px;
   }
 

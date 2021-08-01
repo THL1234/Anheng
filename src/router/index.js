@@ -9,6 +9,8 @@ import alldata from '../view/Alldata.vue'
 import persondata from '../view/PersonData.vue'
 import demand from '../components/Demand.vue'
 import sanfang from '../view/Sanfang.vue'
+import dandian from '../components/Dandian.vue'
+import guiji from '../components/GuiJi.vue'
 Vue.use(Router)
 
 const router = new Router({
@@ -53,6 +55,15 @@ const router = new Router({
           path:'/all/demand',
           name:'demand',
           component:demand
+        },
+        {
+          path:'/all/dandian',
+          name:dandian,
+          component:dandian
+        },{
+          path:'/all/guiji',
+          name:guiji,
+          component:guiji
         },
        {
           path:'/all',

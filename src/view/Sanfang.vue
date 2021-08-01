@@ -46,8 +46,8 @@
             <!-- 占两行-->
             <td colspan="2">
                 <div style="margin-left: 60px">
-                <el-button style="width: 100px" type="primary" @click="retu">取消</el-button>
-                <el-button style="width: 100px" type="primary" @click="doLogin">登录</el-button>
+                  <el-button style="width: 100px" type="primary" @click="doLogin">登录</el-button>
+                  <el-button style="width: 100px" type="primary" @click="retu">取消</el-button>
               </div>
             </td>
           </tr>

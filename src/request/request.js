@@ -5,7 +5,7 @@ import router from '../router/index.js'
 
 //创建一个单例
 const instance = axios.create({
-  baseURL:"10.11.20.195",
+  baseURL:"http://172.20.10.6:8888",
   timeout:5000,
   withCredentials:true
 })

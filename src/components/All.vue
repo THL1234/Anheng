@@ -1,15 +1,15 @@
 <template>
   <div>
     <el-container>
-      <el-aside width="190px"><side></side></el-aside>
+      <el-aside style="width:190px;"><side></side></el-aside>
       <el-container class="app_content">
         <!--头部区域-->
-        <el-header style="box-shadow: 0 1px 2px rgba(205,205,205,205);height: 70px;">
+      <!--  <el-header style="box-shadow: 0 1px 2px rgba(205,205,205,205);height: 30px;background-color: #00265f;margin-left: -8px;">  &lt;!&ndash;头部导航栏&ndash;&gt;
           <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" style="margin-top: 20px;margin-left: 1180px;"></el-avatar>
            <div style="float:right;margin-top: 30px;margin-right: 0px;">
              <el-dropdown>
               <span class="el-dropdown-link">
-                用户名<i class="el-icon-arrow-down el-icon--right"></i>
+                用户名<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>
               </span>
                <el-dropdown-menu slot="dropdown">
                  <el-dropdown-item>用户名</el-dropdown-item>
@@ -18,11 +18,11 @@
                </el-dropdown-menu>
              </el-dropdown>
            </div>
-        </el-header>
+        </el-header>-->
 
         <!-- 内容区域 -->
         <el-main style="width:1320px;">
-          <router-view/>
+            <router-view/>
         </el-main>
       </el-container>
     </el-container>
@@ -50,7 +50,7 @@
 
 <style>
   .app_content {
-    min-height: 500px;
+    height: 720px;
     margin-left: 0px;
     border: 1px solid #eee;
     box-sizing: border-box;

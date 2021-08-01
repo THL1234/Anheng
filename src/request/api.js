@@ -39,5 +39,33 @@ export default{
       url:'/Login_Data/GetLogin_NumByAddress',
     })
     return req
+  },
+
+  //对接饼图数据
+  CakeAPI(params){
+    // console.log(params);
+    const req=request({
+      method:'get',
+      url:'/Login_Data/GetLogin_NumByAddressAndProvince?address='+params,
+      params
+    })
+    return req
+  },
+
+  //单个用户登录记录
+  DandianAPI(){
+    const req=request({
+      method:'get',
+      url:'/Login_Data/GetLogin_DataAll',
+    })
+    return req
+  },
+
+  GuijiAPI(){
+    const req=request({
+      method:'get',
+      url:'/Login_Data/GetLogin_DataById?id=1',
+    })
+    return req
   }
 }

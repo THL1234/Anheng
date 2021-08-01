@@ -65,6 +65,8 @@
         </template>
       </el-table-column>
     </el-table>
+    <!--表格分页组件-->
+    <pagination/>
 
     <el-dialog title="修改用户" :visible.sync="editBox" width="50%" :before-close="handleClose">
       <el-form ref="form" label-width="100px" v-model="user">
@@ -115,7 +117,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="handleAddUser">确 定</el-button>
-            </span>
+      </span>
     </el-dialog>
 
   </div>
@@ -123,8 +125,12 @@
 
 
 <script>
+  import pagination from '../components/Pagination.vue'
   export default {
     name: "tabledata",
+    components:{
+      pagination,
+    },
     data() {
       return{
         radio: 3,
