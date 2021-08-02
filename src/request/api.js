@@ -67,5 +67,13 @@ export default{
       url:'/Login_Data/GetLogin_DataById?id=1',
     })
     return req
-  }
+  },
+
+ /* PersonalAPI(params){
+    const req=request({
+      method:'get',
+      url:'/Login_Data/GetPageAll?page='+params,
+    })
+    return req
+  }*/
 }

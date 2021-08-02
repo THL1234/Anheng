@@ -5,7 +5,7 @@ import router from '../router/index.js'
 
 //创建一个单例
 const instance = axios.create({
-  baseURL:"http://172.20.10.6:8888",
+  baseURL:"http://172.20.10.5:8888",
   timeout:5000,
   withCredentials:true
 })
@@ -43,6 +43,7 @@ instance.interceptors.response.use(
       }
     return res
   },error=>{
+    alert(error.response.code)
     if(error.response.code==504||error.response.code==404){
       Message.error({message: '服务器被吃了'})
     }else if(error.response.code==403){
