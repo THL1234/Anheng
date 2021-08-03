@@ -4,26 +4,25 @@ import { Message } from 'element-ui';
 import router from '../router/index.js'
 
 //创建一个单例
-const instance = axios.create({
-  baseURL:"10.11.20.195",
-  /* http://172.20.10.5:8888 */
-  timeout:5000,
-  withCredentials:true
-})
+//const instance = axios.create({
+/*  baseURL:"http://172.20.10.6:8888", */
+// timeout:5000,
+// withCredentials:true
+//})
 
 //拦截器
 //请求拦截
-instance.interceptors.request.use(
+axios.interceptors.request.use(
   (config)=>{
-    if(window.localStorage.getItem('token')){
-       config.headers['Authorization']=window.sessionStorage
-     }
+    /*     if(window.sessionStorage.getItem('tokenStr')){
+           config.headers['Authorization']=window.sessionStorage
+         }
 
-    if(token){
-        config.headers={
-            'token':token
-        }
-    }
+        if(token){
+            config.headers={
+                'token':token
+            }
+        }*/
     return config
   },err=>{
     return Promise.reject(err)
@@ -32,21 +31,44 @@ instance.interceptors.request.use(
 
 
 //响应拦截
-instance.interceptors.response.use(
+axios.interceptors.response.use(
   res=>{
     if( res.status&&res.status == 200){
       if(res.data.code === 401 || res.data.code === 403){
-         Message.error({message: res.data.message});
-         return;
+        Message.error({message: res.data.message});
+        /*     return; */
       } else if (res.data.code === 200) {
         Message.success({ message: res.data.message })
+        router.replace('/all');
       }
+      else if (res.data.code === 249) {
+        Message.error({ message: res.data.message })
+        router.replace('/login')
+        return
       }
+      else if (res.data.code === 251) {
+        Message.error({ message: res.data.message })
+        router.replace('/login')
+        return
+      }
+      /*   else if (res.data.code === 252) {
+          Message.error({ message: res.data.message })
+             return
+        } */
+      else if (res.data.code === 253) {
+        /*    Message.error({ message: res.data.message }) */
+        router.replace('/login')
+        return
+      }/* else{
+            setTimeout(function (){
+            self.$router.replace('/all');
+        },  800) */
+
+    }
     return res
   },error=>{
-    alert(error.response.code)
-    if(error.response.code==504||error.response.code==404){
-      Message.error({message: '服务器被吃了'})
+    if(error.response.code==504||error.response.data.code==404){
+      Message.error({message: error.response.data.message})
     }else if(error.response.code==403){
       Message.error({message: '权限不足，请联系管理员'})
     }else if(error.response.code==401){
@@ -63,4 +85,4 @@ instance.interceptors.response.use(
   }
 )
 
-export default instance
+export default axios

@@ -14,6 +14,7 @@ import godemand from '../components/GodDemand.vue'
 import loginalllist from '../components/LoginAllList.vue'
 import loginperlist from '../components/LoginPerList.vue'
 import authority from '../components/Authority.vue'
+import trendprediction from '../components/trendprediction'
 Vue.use(Router)
 
 const router = new Router({
@@ -84,9 +85,14 @@ const router = new Router({
           name:guiji,
           component:guiji
         },
+        {
+          path:'/all/trendprediction',
+          name:trendprediction,
+          component:trendprediction
+        },
        {
           path:'/all',
-          redirect:'/all/table'
+          redirect:'/all/dataAnalysis'
         },
       ],
     },

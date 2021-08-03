@@ -66,14 +66,24 @@
           //渲染一级菜单
           this.menuList1=[
             {
-              name:"用户管理",
-              path:'/all/table',
-              icon:"el-icon-menu",
-            },
-            {
               name:"数据分析",
               path:"/all/dataAnalysis",
               icon:"el-icon-setting"
+            },
+            {
+              name:"轨迹图",
+              path:"/all/guiji",
+              icon:"el-icon-s-data"
+            },
+            {
+              name:"趋势预测图",
+              path:'/all/trendprediction',
+              icon:"el-icon-menu",
+            },
+            {
+              name:"用户管理",
+              path:'/all/table',
+              icon:"el-icon-menu",
             },
             {
               name:"请求管理",
@@ -81,10 +91,6 @@
               icon:"el-icon-s-data"
             },
             {
-              name:"轨迹图",
-              path:"/all/guiji",
-              icon:"el-icon-s-data"
-            },{
               name:"权限管理",
               path:"/all/authority",
               icon:"el-icon-s-data"
