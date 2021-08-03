@@ -1,90 +1,63 @@
 <template>
   <div>
-    <span>省份:</span>
-    <el-select v-model="value" placeholder="选择省份">
-      <el-option
-        v-for="item in option"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value">
-      </el-option>
-    </el-select>
-
-    <span>市:</span>
-    <el-select v-model="value2" placeholder="选择市">
-      <el-option
-        v-for="item in option2"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value">
-      </el-option>
-    </el-select>
-
-    <span>区:</span>
-    <el-select v-model="value3" placeholder="选择区">
-      <el-option
-        v-for="item in option3"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value">
-      </el-option>
-    </el-select>
-
     <el-table
       :data="tableData"
       border
       style="width: 100%;margin-top: 30px;">
       <el-table-column
-        prop="name"
-        label="省份"
-        width="180">
+        prop="userName"
+        label="姓名"
+        width="370">
       </el-table-column>
       <el-table-column
-        prop="minvalue"
-        label="最低"
-        width="180">
+        prop="moduleNames"
+        label="坐标"
+        width="370">
       </el-table-column>
       <el-table-column
-        prop="middlevalue"
-        label="中位数">
-      </el-table-column>
-      <el-table-column
-        prop="frequentmodule"
-        label="访问频率最高模块">
-      </el-table-column>
-
-      <el-table-column label="操作" width="180">
-        <template slot-scope="scope">
-          <el-button type="primary" @click="handleEditClick(scope.$index,scope.row)"  size="mini">编辑</el-button>
-          <el-button type="danger" size="mini" @click="handleDelClick(scope.$index,scope.row)">删除</el-button>
-        </template>
+        prop="Affiliation"
+        label="近一个星期访问模块">
       </el-table-column>
     </el-table>
+
+    <div style="position: absolute;left: 26%;top: 72%;">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        @current-change="handleCurrentChange"
+        :total="total"
+        class="pag">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
 
 <script>
+  import axios from 'axios'
   export default {
     name: "personaldata",
     data() {
       return{
         radio: 3,
-        tableData:[{
+        tableData:[],
+        total:0,
+          /*{
           name:'唐海林',
           minvalue:1312211,
           middlevalue:'海南海口',
           frequentmodule:'电脑城'
-        },{
-          name:'唐海林',
-          minvalue:1312211,
-          middlevalue:'海南海口',
-          frequentmodule:'电脑城'
-        }],
+      },{
+        name:'唐海林',
+        minvalue:1312211,
+        middlevalue:'海南海口',
+        frequentmodule:'电脑城'
+      }*/
         input:'',
         value:'',
         value2:'',
         value3:'',
+        total:0,
 
         option:[],
         option2:[],
@@ -95,32 +68,44 @@
         user:{},
       }
     },
+
+    created(){
+      var self=this;
+      //表格的数据初始化
+      axios.get('http://10.11.37.68:8081/data_list/person?page=1').then(res=>{
+        var tableData=res.data.data.listMsg;
+        self.total=res.data.data.totalPage*10;
+        for(var i=0;i<tableData.length;i++){
+          var singleData=new Object();
+          singleData.userName=tableData[i].userName;
+          singleData.moduleNames=tableData[i].moduleNames;
+          singleData.Affiliation=tableData[i].Affiliation;
+          self.tableData.push(singleData);
+        }
+      })
+    },
     methods:{
-      handleEditClick(index,row){
-        console.log(row);
-        this.editBox = true
-        this.user = row
-        this.editIndex = index
-      },
-      // eslint-disable-next-line no-unused-vars
-      handleDelClick(index,row){
-        this.$confirm('此操作将删除该用户, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.tableData.splice(index,1)
-          this.$message({showClose: true, message: "删除成功", type: 'success'});
-        })
+
+      //显示第几页
+      handleCurrentChange(val){
+        this.getData(val)
       },
 
-      handleEditUser(){
-        this.tableData.splice(this.editIndex,1,this.user)
-        this.$message({showClose: true, message: "修改成功", type: 'success'});
-        this.editBox = false
-      },
-      handleAddClick(){
-        this.addBox = true
+      getData(val){
+        var self=this;
+        axios.get('http://10.11.37.68:8081/data_list/person?page='+val).then(res=>{
+          console.log(res.data)
+          var personalData=res.data.data.listMsg;   //赋值
+          var datalist=[];
+          for(var i=0;i<personalData.length;i++){
+            var singleData=new Object();
+            singleData.userName=personalData[i].userName;
+            singleData.moduleNames=personalData[i].moduleNames;
+            singleData.Affiliation=personalData[i].Affiliation;
+            datalist.push(singleData);
+          }
+          self.tableData=datalist;
+        })
       }
     }
   }

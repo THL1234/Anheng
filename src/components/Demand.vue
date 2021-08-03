@@ -3,92 +3,46 @@
     <el-table
       :data="tableData"
       border
-      style="width: 100%;margin-top: 30px;">
+      style="width: 100%;margin-top:0px;">
       <el-table-column
         prop="invitedname"
         label="请求者姓名"
-        width="180">
+        width="270">
       </el-table-column>
       <el-table-column
         prop="invitedphone"
         label="请求者电话"
-        width="180">
+        width="240">
       </el-table-column>
       <el-table-column
         prop="invitedrole"
         label="请求角色">
       </el-table-column>
-      <el-table-column label="操作" width="180">
-        <template slot-scope="scope">
-          <el-button type="primary" @click="handleEditClick(scope.$index,scope.row)"  size="mini">同意</el-button>
-          <el-button type="danger" size="mini" @click="handleDelClick(scope.$index,scope.row)">拒绝</el-button>
-        </template>
+      <el-table-column
+        prop="isAgree"
+        label="同意状态">
+      </el-table-column>
+
+      <el-table-column
+        label="操作">
+        <el-button type="primary" @click="LoginIn()" :disabled="disabled">是否允许登入</el-button>
       </el-table-column>
     </el-table>
-
-    <el-dialog title="修改用户" :visible.sync="editBox" width="50%" :before-close="handleClose">
-      <el-form ref="form" label-width="100px" v-model="user">
-        <el-form-item label="时间:">
-          <el-input placeholder="请输入时间" maxlength="50" v-model = "user.name"></el-input>
-        </el-form-item>
-        <el-form-item label="名字:">
-          <el-input placeholder="请输入名字" maxlength="50" v-model = "user.telephone"></el-input>
-        </el-form-item>
-        <el-form-item label="地址:">
-          <el-input placeholder="请输入地址" maxlength="50" v-model = "user.belong"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="handleEditUser">确 定</el-button>
-            </span>
-    </el-dialog>
-
-    <!--对话框组件-->
-    <el-dialog title="添加用户" :visible.sync="addBox" width="50%" :before-close="handleClose">
-      <el-form ref="form" label-width="100px" v-model="addUserData">
-        <el-form-item label="名字">
-          <el-input placeholder="新用户姓名" maxlength="50" v-model = "addUserData.name"></el-input>
-        </el-form-item>
-        <el-form-item label="密码">
-          <el-input placeholder="密码" maxlength="50" v-model = "addUserData.name"></el-input>
-        </el-form-item>
-        <el-form-item label="确认密码">
-          <el-input placeholder="确认密码:" maxlength="50" v-model = "addUserData.name"></el-input>
-        </el-form-item>
-        <el-form-item label="选择省份">
-          <el-select placeholder="选择省份">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="权限">
-          <el-radio-group v-model="radio">
-            <el-radio :label="3">省长</el-radio>
-            <el-radio :label="6">市长</el-radio>
-            <el-radio :label="9">区长</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="handleAddUser">确 定</el-button>
-            </span>
-    </el-dialog>
-
   </div>
 </template>
 
 
 <script>
+  import axios from 'axios'
+  import Sanfang from '../view/Sanfang'
   export default {
     name: "demand",
     data() {
       return{
         radio: 3,
-        tableData:[{
+        disabled:true,
+        tableData:[],
+          /*{
           invitedname:'唐海林',
           invitedphone:1312211,
           invitedrole:'海南海口',
@@ -96,7 +50,7 @@
           invitedname:'唐海林',
           invitedphone:1312211,
           invitedrole:'海南海口',
-        }],
+        }*/
         input:'',
         addBox : false,
         editBox:false,
@@ -109,7 +63,43 @@
         }
       }
     },
+
+    created(){
+      var i=setInterval(this.isAgree, 5000);
+      var Sanfanguser=JSON.parse(window.localStorage.getItem('Sanfanglogin'));
+      var tab=new Object();
+      tab.invitedname=Sanfanguser.requestName;
+      tab.invitedphone=Sanfanguser.requestPhoneNum;
+      tab.isAgree="不同意";
+      if(Sanfanguser.role_id==1){
+        tab.invitedrole="省级干部";
+      }else if(Sanfanguser.role_id==2){
+        tab.invitedrole="市级干部";
+      }else{
+        tab.invitedrole="同志";
+      }
+      this.tableData.push(tab);
+    },
     methods:{
+      //判断是否获得通过请求
+      isAgree(){
+        var self=this;
+/*        axios.get('http://10.11.32.195:7002/provider/response?requestPhoneNum='+this.tableData[0].invitedphone).then(res =>{
+        console.log(res.data.data.token)
+               if(res.data.code==200){
+                  self.tableData[0].isAgree="已同意";
+                  self.disabled=false
+                  window.localStorage.setItem('token',res.data.data.token)
+                  window.localStorage.setItem('role',"老板");
+               }else if(res.data.code==-200){
+                  this.dataData[0].isAgree="已拒绝"
+               }
+        })*/
+
+      },
+      loginIn(){
+         this.$router.replace('/all')
+      },
       handleEditClick(index,row){
         console.log(row);
         this.editBox = true

@@ -25,19 +25,23 @@
 </template>
 
 <script>
-  import textAPI from '../request/api.js'
+  import axios from 'axios'
   export default {
     inject:['reload'],
     name:'login',
     data(){
       return{
         info:{
-          phone:'',
-          password:'',
+          phone:'15068598954',
+          password:'0123',
+          ip:'115.159.55.236',
+          mac:'mac2'
         },
         code:'',
-        backgroundImage:'url(../assets/bg.jpg)'
       }
+    },
+    mounted(){
+
     },
     methods:{
       //登录事件
@@ -47,18 +51,25 @@
           if(this.info.phone.length==0||this.info.password.length==0){
             this.$message.error("请输入完整用户名和密码");
           }else{
-            //axios发送请求
-            self=this;
-            textAPI.LoginAPI(this.info).then(res=>{
-              //存储token到localStorage
-              var token = res.data.data.token;
-              var role="老板";
-              window.localStorage.setItem('token',token)
-              window.localStorage.setItem('role',role);
-              setTimeout(function (){
-                self.$router.replace('/all');
-              }, 800)
-          })
+            var self=this;
+            axios.post('http://10.11.47.145:8081/User/login',this.info).then(res=>{
+              console.log(res)
+              if(res.data.code==200){
+                this.$message.success(res.data.message);
+                var token = res.data.data.token;
+                var role="老板";
+                window.localStorage.setItem('token',token)
+                window.localStorage.setItem('role',role);
+                window.localStorage.setItem('userPhone',self.info.phone)
+                window.localStorage.setItem('affiliation',res.data.affiliation)
+                setTimeout(function (){
+                  self.$router.replace('/all');
+                }, 800);
+              }else{
+                this.$message.error(res.data.message);
+              }
+            })
+
           }
         },
 

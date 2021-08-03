@@ -5,7 +5,8 @@ import router from '../router/index.js'
 
 //创建一个单例
 const instance = axios.create({
-  baseURL:"http://172.20.10.5:8888",
+  baseURL:"10.11.20.195",
+  /* http://172.20.10.5:8888 */
   timeout:5000,
   withCredentials:true
 })
@@ -14,7 +15,7 @@ const instance = axios.create({
 //请求拦截
 instance.interceptors.request.use(
   (config)=>{
-/*     if(window.sessionStorage.getItem('tokenStr')){
+    if(window.localStorage.getItem('token')){
        config.headers['Authorization']=window.sessionStorage
      }
 
@@ -22,7 +23,7 @@ instance.interceptors.request.use(
         config.headers={
             'token':token
         }
-    }*/
+    }
     return config
   },err=>{
     return Promise.reject(err)

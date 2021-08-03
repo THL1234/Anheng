@@ -9,8 +9,11 @@ import alldata from '../view/Alldata.vue'
 import persondata from '../view/PersonData.vue'
 import demand from '../components/Demand.vue'
 import sanfang from '../view/Sanfang.vue'
-import dandian from '../components/Dandian.vue'
 import guiji from '../components/GuiJi.vue'
+import godemand from '../components/GodDemand.vue'
+import loginalllist from '../components/LoginAllList.vue'
+import loginperlist from '../components/LoginPerList.vue'
+import authority from '../components/Authority.vue'
 Vue.use(Router)
 
 const router = new Router({
@@ -42,6 +45,16 @@ const router = new Router({
           component:dataAnalysis
         },
         {
+          path:'/all/loginalllist',
+          name:'loginalllist',
+          component:loginalllist
+        },
+        {
+          path:'/all/loginperlist',
+          name:'loginperlist',
+          component:loginperlist
+        },
+        {
           path:'/all/alldata',
           name:'alldata',
           component:alldata
@@ -52,15 +65,21 @@ const router = new Router({
           component:persondata
         },
         {
+          path:'/all/Godemand',
+          name:'Godemand',
+          component:godemand
+        },
+        {
           path:'/all/demand',
           name:'demand',
           component:demand
         },
         {
-          path:'/all/dandian',
-          name:dandian,
-          component:dandian
-        },{
+          path:'/all/authority',
+          name:'authority',
+          component:authority
+        },
+        {
           path:'/all/guiji',
           name:guiji,
           component:guiji

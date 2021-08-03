@@ -255,13 +255,12 @@
       }
     },
 
+    //初始化地图数据
     created(){
-
-      textAPI.MapAPI().then(res => {
+      axios.get('http://172.20.10.5:8888/Login_Data/GetLogin_NumByAddress').then(res=>{
         localStorage.setItem('city', JSON.stringify((res.data.data.city)))
-        // this.data = res.data.data.city
-
       })
+
     },
 
     methods: {
@@ -307,7 +306,7 @@
       // 设置地图的option配置项
       setMapOption(place = 'china', center = undefined) {
         this.option = {
-          backgroundColor: "#0ffbff",  //地图背景颜色
+          /*backgroundColor: "#0ffbff",  //地图背景颜色 */
           tooltip : { // 鼠标移到图里面的浮动提示框
             trigger: 'item'
           },
@@ -326,7 +325,6 @@
           },
           geo: {
             map: place,
-            center: center,
             aspectScale: 0.75, // 地图长宽比
             scaleLimit: { // 放大缩小最大比例限制
               min: 0.8,
@@ -334,30 +332,27 @@
             },
             label: {
               emphasis: {
-                show: false
+                show: true,
+                color: "#fff"
               }
             },
             roam: true,
+            //   放大我们的地图
+            zoom: 1,
             itemStyle: {
               normal: {
-                areaColor: '#0ffbff',
-                borderColor: '#0ffbff'
+                areaColor: "rgba(43, 196, 243, 0.42)",
+                borderColor: "rgba(43, 196, 243, 1)",
+                borderWidth: 1
               },
               emphasis: {
-                show: true,
-                areaColor: '#3d6aff',
+                areaColor: "#2B91B7"
               }
-            },
-            itemStyle: {
-              areaColor: '#eeeeee' // 地图本身的颜色
             }
-            // emphasis: {
-            //   show: false,
-            // },
           },
           series: [
             {
-              name: 'pm2.5',
+              name: '位置：',
               type: 'scatter',
               coordinateSystem: 'geo',
               data: this.convertData(this.data),
@@ -377,17 +372,17 @@
               },
               itemStyle: {
                 normal: {
-                  color: '#3d6aff' //为空的点集的颜色
+                  color: '#58FA58' //为空的点集的颜色
                 }
               }
             },
             {
-              name: 'Top 5',
+              name: 'Top 10',
               type: 'effectScatter',
               coordinateSystem: 'geo',
               data: this.convertData(this.data.sort(function (a, b) {
                 return b.value - a.value;
-              }).slice(0, 5)),
+              }).slice(0, 10)),
               encode: {
                 value: 2
               },
@@ -409,7 +404,7 @@
               // },
               itemStyle: {
                 normal: {
-                  color: '#3d6aff',   //非空点集的颜色
+                  color: '#58FA58',   //非空点集的颜色
                   // shadowBlur: 10,
                   // shadowColor: '#333'
                 }
@@ -586,10 +581,13 @@
   }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
   .echart-map {
+    background: url(../assets/bg.jpg);
+    background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
     margin-top:-30px;
     margin-left:-22px;
     width: 1350px;

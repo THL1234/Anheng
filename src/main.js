@@ -10,6 +10,7 @@ import axios from 'axios'
 import echarts from 'echarts'
 
 Vue.use(ElementUI);
+Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts=echarts;

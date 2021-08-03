@@ -1,7 +1,7 @@
 <template>
   <div style="height: 100%">
     <el-row class="tac" style="height: 100%">
-      <el-col :span="3" style="height: 100%">
+      <el-col :span="4" style="height: 100%">
         <el-menu
           :default-active="$route.path"
           router
@@ -22,6 +22,7 @@
               <el-menu-item :index="it.path" v-for="it in item.sub" :key="item.path"><span class="MenuText">{{it.name}}</span></el-menu-item>
             </el-menu-item-group>
           </el-submenu>
+          <el-button plain @click.native="quit()" style="margin-top: 100px;margin-left: 40px;">退出登录</el-button>
         </el-menu>
       </el-col>
     </el-row>
@@ -51,6 +52,14 @@
       handleClose(key, keyPath) {
         console.log(key, keyPath);
       },
+
+      quit(){
+        window.localStorage.setItem('token',null);
+        window.localStorage.setItem('role',null);
+        window.localStorage.setItem('userPhone',null);
+        this.$message.success("欢迎您下次登录");
+        this.$router.replace('/login')
+      },
       getMenuList(){
         //高级用户渲染
         if(this.role=="老板"){
@@ -68,37 +77,52 @@
             },
             {
               name:"请求管理",
-              path:"/all/demand",
+              path:"/all/Godemand",
               icon:"el-icon-s-data"
-            },{
-               name:"个人行为分布图",
-               path:"/all/dandian",
-               icon:"el-icon-s-data"
             },
             {
               name:"轨迹图",
               path:"/all/guiji",
               icon:"el-icon-s-data"
+            },{
+              name:"权限管理",
+              path:"/all/authority",
+              icon:"el-icon-s-data"
             }
           ],
             //渲染包含二级菜单的项
             this.menuList2=[{
-              name:"数据列表",
+              name:"访问数据列表",
               path:'3',
               icon:"el-icon-setting",
               sub:[
                 {
-                  name:"个人数据列表",
+                  name:"(访)个人数据列表",
                   path:"/all/persondata",
                   icon:""
                 },
                 {
-                  name:"整体数据列表",
+                  name:"(访)整体数据列表",
                   path:"/all/alldata",
                   icon:""
                 }
               ]
-             }
+             },{
+              name:"登录数据列表",
+              path:'4',
+              icon:"el-icon-setting",
+              sub:[
+                {
+                  name:"(登)整体数据列表",
+                  path:'/all/loginalllist',
+                  icon:""
+                },{
+                  name:"(登)个人整体数据列表",
+                  path:'/all/loginperlist',
+                  icon:""
+                }
+              ]
+            }
             ]
         }else if(this.role=="第三方用户"){
            this.menuList1=[
