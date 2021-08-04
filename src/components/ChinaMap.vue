@@ -260,7 +260,6 @@
       axios.get('http://172.20.10.5:8888/Login_Data/GetLogin_NumByAddress').then(res=>{
         localStorage.setItem('city', JSON.stringify((res.data.data.city)))
       })
-
     },
 
     methods: {
@@ -479,6 +478,7 @@
           self=this;
           //初始化饼图和柱状图数据
           textAPI.CakeAPI(params.name).then(res =>{
+            console.log(res)
             window.localStorage.setItem("cake",null);
             window.localStorage.setItem("zhu",null);
             console.log(res.data.data.city);
@@ -588,10 +588,11 @@
     background-size: cover;
     -webkit-background-size: cover;
     -o-background-size: cover;
-    margin-top:-30px;
-    margin-left:-22px;
+    position: absolute;
+    right:-20px;
+    bottom:0px;
     width: 1350px;
-    height: 730px;
+    height: 722px;
   }
 
   *{

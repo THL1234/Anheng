@@ -46,7 +46,7 @@ export default{
     // console.log(params);
     const req=request({
       method:'get',
-      url:'/Login_Data/GetLogin_NumByAddressAndProvince?address='+params,
+      url:'http://172.20.10.5:8888/Login_Data/GetLogin_NumByAddressAndProvince?address='+params,
       params
     })
     return req
@@ -56,7 +56,7 @@ export default{
   DandianAPI(){
     const req=request({
       method:'get',
-      url:'/Login_Data/GetLogin_DataAll',
+      url:'http://172.20.10.5:8888/Login_Data/GetLogin_DataAll',
     })
     return req
   },

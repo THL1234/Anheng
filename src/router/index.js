@@ -107,20 +107,20 @@ const router = new Router({
   ],
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.path === '/login') {
-    next();
-  } else if(to.path==='/sanfang'){
-     next();
-  } else{
-    let token = localStorage.getItem('token');
-    if (token === 'null' || token === '') {
-      next('/login');
-    } else {
-      next();
-    }
-  }
-});
+          router.beforeEach((to, from, next) => {
+            if (to.path === '/login') {
+              next();
+            } else if(to.path==='/sanfang'){
+               next();
+            } else{
+              let token = localStorage.getItem('token');
+              if (token === 'null' || token === '') {
+                next('/login');
+              } else {
+                next();
+              }
+            }
+          });
 export default router;
 
 

@@ -9,7 +9,7 @@ import router from '../router/index.js'
 // timeout:5000,
 // withCredentials:true
 //})
-
+/*axios.defaults.headers.post['Content-Type'] = 'application/json';*/
 //拦截器
 //请求拦截
 axios.interceptors.request.use(
@@ -39,7 +39,7 @@ axios.interceptors.response.use(
         /*     return; */
       } else if (res.data.code === 200) {
         Message.success({ message: res.data.message })
-        router.replace('/all');
+        /*router.replace('/all');*/
       }
       else if (res.data.code === 249) {
         Message.error({ message: res.data.message })

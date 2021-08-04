@@ -31,12 +31,12 @@
 
 <script>
   import axios from 'axios'
-  export default{
-    name:'godemand',
-    data(){
-      return{
-        tableData:[],
-   /*          {
+  export default {
+    name: 'godemand',
+    data () {
+      return {
+        tableData: [],
+        /*          {
             invitedname:'唐海林',
             invitedphone:1312211,
             invitedrole:'省级干部',
@@ -47,37 +47,35 @@
           }*/
       }
     },
-    created(){
-      var self=this;
-      var phone=window.localStorage.getItem('userPhone');
-      axios.get('http://10.11.32.195/consumer/getMessage?phoneNum='+phone).then(res=>{
-          console.log(res.data);
-          var tableData=res.data.data.requestEntities;
-          for(var i=0;i<tableData.length;i++){
-            var singleData=new Object();
-            if(tableData[i].role_Id==1){
-              singleData.invitedrole="省级干部"
-            }else if(tableData[i].role_Id==2){
-              singleData.invitedrole="市级干部"
-            }
-            else{
-              singleData.invitedrole="同志"
-            }
-            singleData.requestName=tableData[i].requestName;
-            singleData.requestPhoneNum=tableData[i].requestPhoneNum;
-            singleData.responsePhoneNum=tableData[i].responsePhoneNum;
-            singleData.startTime=tableData[i].startTime;
-            self.tableData.push(singleData);
+    created () {
+      var self = this;
+      var phone = window.localStorage.getItem('userPhone');
+      axios.get('http://172.20.10.6:7001/consumer/getMessage?phoneNum=' + phone).then(res => {
+        var tableData = res.data.data.requestEntities;
+        for (var i = 0; i < tableData.length; i++) {
+          var singleData = new Object();
+          if (tableData[i].role_Id == 1) {
+            singleData.invitedrole = "省级干部"
+          } else if (tableData[i].role_Id == 2) {
+            singleData.invitedrole = "市级干部"
+          } else {
+            singleData.invitedrole = "同志"
           }
+          singleData.requestName = tableData[i].requestName;
+          singleData.requestPhoneNum = tableData[i].requestPhoneNum;
+          singleData.responsePhoneNum = tableData[i].responsePhoneNum;
+          singleData.startTime = tableData[i].startTime;
+          self.tableData.push(singleData);
+        }
       })
     },
 
-    methods:{
-      agree(){
-        var token=window.localStorage.getItem('token')
+    methods: {
+      agree () {
+        var token = window.localStorage.getItem('token')
         this.$axios({
           method: "get", //请求类型 get post
-          url: "http://10.11.32.195/consumer/success",   //后台接口地址
+          url: "http://172.20.10.6:7001/consumer/success",   //后台接口地址
           //请求头（一般用于存放token等用户信息）
           headers: {
             'token': token
@@ -87,16 +85,25 @@
         }).then(res => {
           console.log(res)
         })
-       },
+      },
 
-
-      disagree(){
-        axios.get('http://10.11.32.195/consumer/failed').then(res=>{
-
+      disagree () {
+        var token = window.localStorage.getItem('token')
+        this.$axios({
+          method: "get", //请求类型 get post
+          url: "http://172.20.10.6:7001/consumer/failed",   //后台接口地址
+          //请求头（一般用于存放token等用户信息）
+          headers: {
+            'token': token
+            //键值对方式，前面是键，后面是token，也可以存放固定的token
+          },
+          //给后台传的数据
+        }).then(res => {
+          this.$message(res.data.message)
         })
+
       }
 
     }
-
   }
 </script>

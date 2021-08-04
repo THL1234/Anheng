@@ -147,7 +147,8 @@
     created(){
       var self=this;
       var address=window.localStorage.getItem('affiliation');
-      axios.get('http://172.20.10.5:8888/Login_Data/GetLogin_DataByAddress_one?page=1&address='+address).then(res=>{
+      axios.get('http://172.20.10.5:8888/Login_Data/GetLogin_DataByAddress_one?page=1&address=浙江省杭州市').then(res=>{
+        console.log(res.data)
         self.total=res.data.data.pages*10;
         var personalData=res.data.data.login_data;   //赋值表格信息
         var provinceData=res.data.data.province;

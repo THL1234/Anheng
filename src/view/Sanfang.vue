@@ -89,7 +89,7 @@
         }else {
           window.localStorage.setItem('Sanfanglogin',JSON.stringify(this.user))  //将三方登录信息存入浏览器
           self=this;
-          axios.post('http://10.11.32.195:7002/provider/request',this.user).then(res=>{
+          axios.post('http://172.20.10.6:7002/provider/request',this.user).then(res=>{
             window.localStorage.setItem('role',"第三方用户");
             window.localStorage.setItem('token','tempory');
             self.$router.replace('/all/demand')
