@@ -6,6 +6,7 @@
     <el-table
       :data="tableData"
       border
+      stripe
       style="width: 100%;margin-top: 30px;">
       <el-table-column
         prop="username"
@@ -101,7 +102,7 @@
         <el-form-item label="电话">
           <el-input placeholder="新用户电话:" maxlength="50" v-model = "addUserData.name"></el-input>
         </el-form-item>
-        <el-form-item label="选择地区">
+        <el-form-item <!--label="选择地区"-->>
 <!--          <el-select v-model="value1" placeholder="选择省份" @change="changeProvince()">
             <el-option
               v-for="item in option1"
@@ -231,6 +232,7 @@
           type: 'warning'
         }).then(() => {
             axios.get('http://10.11.47.145:8081/Manage/deleteUserById?page='+page+"&user_Id="+user_Id+"&address=浙江").then(res =>{
+              console.log(res.data);
             self.tableData=[];
             self.total=res.data.data.pages*10;
             var tableData=res.data.data.users;

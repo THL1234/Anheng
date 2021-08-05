@@ -50,7 +50,8 @@
     created () {
       var self = this;
       var phone = window.localStorage.getItem('userPhone');
-      axios.get('http://172.20.10.6:7001/consumer/getMessage?phoneNum=' + phone).then(res => {
+      axios.get('http://10.11.32.195:7001/consumer/getMessage?phoneNum=' + phone).then(res => {
+        console.log(res.data)
         var tableData = res.data.data.requestEntities;
         for (var i = 0; i < tableData.length; i++) {
           var singleData = new Object();
@@ -75,7 +76,7 @@
         var token = window.localStorage.getItem('token')
         this.$axios({
           method: "get", //请求类型 get post
-          url: "http://172.20.10.6:7001/consumer/success",   //后台接口地址
+          url: "http://10.11.32.195:7001/consumer/success",   //后台接口地址
           //请求头（一般用于存放token等用户信息）
           headers: {
             'token': token
@@ -83,6 +84,7 @@
           },
           //给后台传的数据
         }).then(res => {
+          /*this.$message.success()*/
           console.log(res)
         })
       },
@@ -91,7 +93,7 @@
         var token = window.localStorage.getItem('token')
         this.$axios({
           method: "get", //请求类型 get post
-          url: "http://172.20.10.6:7001/consumer/failed",   //后台接口地址
+          url: "http://10.11.32.195:7001/consumer/failed",   //后台接口地址
           //请求头（一般用于存放token等用户信息）
           headers: {
             'token': token

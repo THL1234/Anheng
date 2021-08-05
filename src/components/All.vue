@@ -1,5 +1,9 @@
 <template>
   <div>
+    <el-header style="background-color: #00265f">
+      <img src="../assets/分布式监测.png" style="width: 40px;height: 40px;margin-top: 7px;">
+      <span style="color:#cecece;font-size: 22px;float:right;margin-right: 1295px;margin-top:13px;">分布式用户中心</span>
+    </el-header>
     <el-container>
       <el-aside style="width:190px;"><side></side></el-aside>
       <el-container class="app_content">
@@ -18,9 +22,9 @@
                </el-dropdown-menu>
              </el-dropdown>
            </div>
-        </el-header>-->
+        </el-header>
 
-        <!-- 内容区域 -->
+         内容区域 -->
         <el-main style="width:1320px;">
             <router-view/>
         </el-main>
@@ -37,6 +41,9 @@
     components:{
       side,
       tabledata
+    },
+    created(){
+      document.body.parentNode.style.overflow = "hidden"
     },
     methods:{
       quit(){

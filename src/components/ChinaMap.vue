@@ -22,7 +22,7 @@
       return {
         dialogVisible: false, //控制dialog对话框的显示与否
         echart: null,
-
+        baseUrl:'http://10.11.37.239:8888',
         // echart地图的配置项
         option: {},
         cityname:'',
@@ -257,9 +257,10 @@
 
     //初始化地图数据
     created(){
-      axios.get('http://172.20.10.5:8888/Login_Data/GetLogin_NumByAddress').then(res=>{
+      axios.get(this.baseUrl+'/Login_Data/GetLogin_NumByAddress').then(res=>{
         localStorage.setItem('city', JSON.stringify((res.data.data.city)))
       })
+
     },
 
     methods: {
@@ -589,8 +590,8 @@
     -webkit-background-size: cover;
     -o-background-size: cover;
     position: absolute;
-    right:-20px;
-    bottom:0px;
+    right:0px;
+    top:60px;
     width: 1350px;
     height: 722px;
   }

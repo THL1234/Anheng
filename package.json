@@ -86,6 +86,12 @@
     "node": ">= 6.0.0",
     "npm": ">= 3.0.0"
   },
+  "proxy": {
+    "/*": {
+      "target": "http://10.11.47.145",
+      "changeOrigin": true
+    }
+  },
   "browserslist": [
     "> 1%",
     "last 2 versions",

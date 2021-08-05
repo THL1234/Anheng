@@ -1,8 +1,10 @@
 <template>
   <div>
+    <h1 style="margin-left:520px;font-size: 27px;font-weight: normal">访问整体数据列表</h1>
     <el-table
       :data="tableData"
       border
+      stripe
       style="width: 100%;margin-top: 30px;">
       <el-table-column
         prop="provinceName"
@@ -24,7 +26,7 @@
       </el-table-column>
     </el-table>
 
-    <div style="position: absolute;left: 20%;top: 72%;">
+    <div style="position: absolute;left: 50%;top: 72%;">
       <el-pagination
         background
         layout="prev, pager, next"
@@ -74,13 +76,13 @@
 
     created(){
       var self=this;
-      axios.get('http://10.11.37.68:8081/data_list/population/1').then(res=>{
-        /*console.log(res.data.data.totalPage);*/
+      axios.get('http://10.11.37.68:8081/data_list/population?page=1').then(res=>{
+        console.log(res.data);
         self.total=res.data.data.totalPage*10;
         var tableData=res.data.data.listMsg;
         for(var i=0;i<tableData.length;i++){
           var singleData=new Object();
-          singleData.provinceName=tableData[i].provinces;
+          singleData.provinceName=tableData[i].province;
           singleData.minvalue=tableData[i].WeekLow;
           singleData.middlevalue=tableData[i].WeekMiddle;
           singleData.frequentmodule=tableData[i].WeekHigh;

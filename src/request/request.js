@@ -38,8 +38,8 @@ axios.interceptors.response.use(
         Message.error({message: res.data.message});
         /*     return; */
       } else if (res.data.code === 200) {
-        Message.success({ message: res.data.message })
-        /*router.replace('/all');*/
+        /*Message.success({ message: res.data.message })*/
+        /*router.replace('/all')*/;
       }
       else if (res.data.code === 249) {
         Message.error({ message: res.data.message })
@@ -78,7 +78,7 @@ axios.interceptors.response.use(
       if(error.response.data.message){
         Message.error({message:error.response.data.message})
       }else{
-        Message.error({message:'未知的错误!'})
+        /*Message.error({message:'未知的错误!'})*/
       }
     }
     return;

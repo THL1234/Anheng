@@ -1,56 +1,70 @@
 <template>
-  <div class="main">
-  <div id="back">
-    <br><br><br><br><br><br><br><br><br><br>
-    <div class="loginBox">
-      <h1>分布式用户中心</h1>
-      <form action="" @submit.prevent="onSubmit">
-        <div class="item">
-          <span>用户名</span>
-          <el-input v-model="info.phone" placeholder="请输入用户名"></el-input>
-        </div>
-        <div class="item">
-          <span>密码</span>
-          <el-input  type="password" v-model="info.password" placeholder="请输入密码"></el-input>
-        </div>
-        <el-button class="btn" type="primary" @click="loadBtn()" plain>登录</el-button><br>
-        <div style="margin-left: 76px;margin-top:35px;">
-          <a v-on:mouseover="changelong()" v-on:mouseout="changeshort()" @click="transfer()">还没账号?请求第三方登录</a>
-          <div style="margin-right:60px;">
-            <div ref="line" id="line"></div><br><br>
+  <div class="login-register">
+    <div class="contain">
+      <div class="big-box">
+        <div class="big-contain">
+          <div class="btitle">分布式用户中心</div>
+          <div class="bform">
+            <el-input class="input" v-model="info.phone" placeholder="请输入电话号码"></el-input>
+            <el-input type="password" class="input" v-model="info.password" placeholder="请输入密码"></el-input>
           </div>
+          <button class="bbutton" @click="loadBtn()">登录</button>
+          <a @click="transfer()" style="margin-top: 30px;">还没账号?请求第三方登录</a>
         </div>
-      </form>
+      </div>
+      <div class="small-box">
+        <div class="small-contain">
+          <div class="stitle">欢迎回来!</div>
+          <p class="scontent">与我们保持联系，请登录你的账户</p>
+        </div>
+      </div>
     </div>
-  </div>
+
+
+    <el-dialog
+         title="提示"
+         :visible.sync="dialogVisible"
+         width="30%"
+         :before-close="handleClose">
+         <span>由于您两次登录ip地址不同，请您进行一次人脸识别，谢谢</span>
+         <span slot="footer" class="dialog-footer">
+         <el-button @click="dialogVisible=false">取 消</el-button>
+         <el-button type="primary" @click="cameraPreviewOpen()">确定</el-button>
+         </span>
+     </el-dialog>
+    <CameraPreview v-if="cameraPreviewVisible" name="cameraPreview" ref="cameraPreview" @refreshCameraPhoto="refreshCameraPhoto"></CameraPreview>
   </div>
 </template>
 
 <script>
   import axios from 'axios'
+  import CameraPreview from '../components/cameraPreview.vue'
   export default {
     inject:['reload'],
     name:'login',
+    components:{
+      CameraPreview,
+    },
     data(){
       return{
         info:{
           phone:'15068598954',
           password:'0123',
           ip:'115.159.55.236',
-          mac:'mac2'
+          mac:'mac1'
         },
         code:'',
+        cameraPreviewVisible:false,
+        dialogVisible:false,
+        picValueZero:'',
       }
-    },
-    mounted(){
-
     },
     methods:{
       //登录事件
       loadBtn(){
         // 我暂时就不模拟了，直接取
         /* console.log(returnCitySN);*/
-        if(this.info.phone.length==0||this.info.password.length==0){
+/*        if(this.info.phone.length==0||this.info.password.length==0){
           this.$message.error("请输入完整用户名和密码");
         }else{
           var self=this;
@@ -72,8 +86,79 @@
               this.$message.error(res.data.message);
             }
           })
+        }*/
+        // 我暂时就不模拟了，直接取
+        /* console.log(returnCitySN);*/
 
+        if(this.info.phone.length==0||this.info.password.length==0){
+          this.$message.error("请输入完整用户名和密码");
+        }else{
+          //axios发送请求
+          self=this;
+          axios({
+            method:"post",
+            url:'http://10.11.47.145:8081/User/login',
+            data:this.info
+          }).then(res=>{
+            if(res.data.code==200){
+              this.$message.success(res.data.message);
+              var token = res.data.data.token;
+              var role="老板";
+              window.localStorage.setItem('token',token)
+              window.localStorage.setItem('role',role);
+              window.localStorage.setItem('userPhone',self.info.phone)
+              window.localStorage.setItem('affiliation',res.data.affiliation)
+              setTimeout(function (){
+                self.$router.replace('/all');
+              }, 800);
+            }
+            if(res.data.code===252){
+              self.dialogVisible=true
+            }/* else{
+                setTimeout(function (){
+                self.$router.replace('/all');
+              }, 800) */
+          })
         }
+
+      },
+
+      cameraPreviewOpen(cameraType){
+        this.dialogVisible = false
+        this.cameraPreviewVisible = true
+        this.$nextTick(() => {
+          this.$refs.cameraPreview.init()
+        });
+      },
+
+      handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+      },
+
+      refreshCameraPhoto(cameraPhoto){
+        let httpZp;
+
+        axios.post('http://10.11.47.145:8081/User/face',{
+          face: cameraPhoto,
+          phone:self.info.phone,
+          password:self.info.password,
+          id:self.info.id,
+          mac:'76-6E-69-E6-02-AD'
+
+        }).then((res) => {
+          console.log(res.data.code)
+          if (res.data.code === 200) {
+            setTimeout(function (){
+              self.$router.replace('/all');
+            }, 800);
+          }
+          httpZp = res.data.src;
+          this.picValueZero = cameraPhoto;
+        }).catch(() => {})
       },
 
       //阻止表单提交
@@ -98,89 +183,143 @@
 </script>
 
 <style scoped>
-  * {
-    margin: 0;
-    padding: 0;
+  .input{
+    width:300px;
   }
-
-  a {
-    text-decoration: none;
-    color:#2a2a2a;
-  }
-
-  #back{
-    width:100%;
-    height: 920px;
-    margin-top: -170px;
-    background-color: aliceblue;
-    background-image: url(../assets/login.jpg);
-    background-repeat:no-repeat
-  }
-
-  label{
-    color:#2a2a2a;
-  }
-
-  .loginBox {
-    width: 400px;
-    height: 380px;
-    background-color: #ffffff;
-    margin-left: 580px;
-    margin-top: 160px;
-    border-radius: 10px;
-    box-shadow: 0 15px 25px 0 rgba(0, 0, 0, .6);
-    padding: 40px;
+  .login-register{
+    width: 100vw;
+    height: 100vh;
     box-sizing: border-box;
+    background-color: #eeeeee;
   }
-
-  h1 {
-    text-align: center;
-    color: #2a2a2a;
-    margin-bottom: 30px;
-    font-family: 'Courier New', Courier, monospace;
-  }
-
-  .item {
-    display:flex;
-    height: 45px;
-    /*border-bottom: 1px solid #fff;*/
-    margin-bottom: 25px;
+  .contain{
+    width: 60%;
+    height: 60%;
     position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 0 3px #f0f0f0,
+    0 0 6px #f0f0f0;
   }
-
-  .item span{
-    width:70px;
-    margin-top: 10px;
-    margin-left: -20px;
-  }
-
-  .item el-input {
-    width: 200px;
-    height: 50px;
-    color: #2a2a2a;
-    padding-top: 20px;
-    box-sizing: border-box;
-  }
-
-  .item label {
+  .big-box{
+    width: 70%;
+    height: 100%;
     position: absolute;
-    left: 0;
-    top: 12px;
-    transition: all 0.5s linear;
+    top: 0;
+    left: 30%;
+    transform: translateX(0%);
+    transition: all 1s;
   }
-
-  .btn{
-    margin-left: 120px;
-    width:80px;
+  .big-contain{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .btitle{
+    font-size: 1.5em;
+    font-weight: bold;
+    color: rgb(57,167,176);
+  }
+  .bform{
+    width: 100%;
+    height: 40%;
+    padding: 2em 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .bform .errTips{
+    display: block;
+    width: 50%;
+    text-align: left;
+    color: red;
+    font-size: 0.7em;
+    margin-left: 1em;
+  }
+  .bform input{
+    width: 50%;
+    height: 30px;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    padding-left: 2em;
+    background-color: #f0f0f0;
+  }
+  .bbutton{
+    width: 20%;
     height: 40px;
+    border-radius: 24px;
+    border: none;
+    outline: none;
+    background-color: rgb(57,167,176);
+    color: #fff;
+    font-size: 0.9em;
+    cursor: pointer;
+  }
+  .small-box{
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(135deg,rgb(57,167,176),rgb(56,183,145));
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(0%);
+    transition: all 1s;
+    border-top-left-radius: inherit;
+    border-bottom-left-radius: inherit;
+  }
+  .small-contain{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .stitle{
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #fff;
+  }
+  .scontent{
+    font-size: 0.8em;
+    color: #fff;
+    text-align: center;
+    padding: 2em 4em;
+    line-height: 1.7em;
+  }
+  .sbutton{
+    width: 60%;
+    height: 40px;
+    border-radius: 24px;
+    border: 1px solid #fff;
+    outline: none;
+    background-color: transparent;
+    color: #fff;
+    font-size: 0.9em;
+    cursor: pointer;
   }
 
-  #line{
-    margin:0px auto;    /* 指产生的组件自适应居中,就产生了从中间到两边的动态效果 */
-    margin-top: 10px;
-    height: 2px;
-    width:0px;
-    background-color: #01ddff;
-    transition: width 0.2s ;
+  .big-box.active{
+    left: 0;
+    transition: all 0.5s;
   }
+  .small-box.active{
+    left: 100%;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: inherit;
+    border-bottom-right-radius: inherit;
+    transform: translateX(-100%);
+    transition: all 1s;
+  }
+
+
 </style>

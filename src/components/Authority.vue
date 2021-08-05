@@ -14,7 +14,7 @@
         label="角色名"
         width="400">
       </el-table-column>
-      <el-table-column label="操作" width="490">
+      <el-table-column label="操作" width="480">
         <template slot-scope="scope">
           <el-button type="primary" @click="handleEditClick(scope.$index,scope.row)"  size="mini">编辑</el-button>
           <el-button type="danger" size="mini" @click="handleDelClick(scope.$index,scope.row)">删除</el-button>

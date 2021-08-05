@@ -1,8 +1,10 @@
 <template>
   <div>
+    <h1 style="margin-left:520px;font-size: 27px;font-weight: normal">访问个人数据列表</h1>
     <el-table
       :data="tableData"
       border
+      stripe
       style="width: 100%;margin-top: 30px;">
       <el-table-column
         prop="userName"
@@ -20,7 +22,7 @@
       </el-table-column>
     </el-table>
 
-    <div style="position: absolute;left: 26%;top: 72%;">
+    <div style="position: absolute;left: 50%;top: 72%;">
       <el-pagination
         background
         layout="prev, pager, next"
@@ -78,8 +80,8 @@
         for(var i=0;i<tableData.length;i++){
           var singleData=new Object();
           singleData.userName=tableData[i].userName;
-          singleData.moduleNames=tableData[i].moduleNames;
-          singleData.Affiliation=tableData[i].Affiliation;
+          singleData.Affiliation=tableData[i].moduleNames;
+          singleData.moduleNames=tableData[i].Affiliation;
           self.tableData.push(singleData);
         }
       })

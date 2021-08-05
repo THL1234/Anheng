@@ -65,19 +65,12 @@
     },
 
     created(){
-      var i=setInterval(this.isAgree, 5000);
+      var i=setInterval(this.isAgree, 2000);
       var Sanfanguser=JSON.parse(window.localStorage.getItem('Sanfanglogin'));
       var tab=new Object();
       tab.invitedname=Sanfanguser.requestName;
       tab.invitedphone=Sanfanguser.requestPhoneNum;
       tab.isAgree="待同意";
-/*      if(Sanfanguser.role_id==1){
-        tab.invitedrole="省级干部";
-      }else if(Sanfanguser.role_id==2){
-        tab.invitedrole="市级干部";
-      }else{
-        tab.invitedrole="同志";
-      }*/
       tab.invitedrole="省级干部"
       this.tableData.push(tab);
     },
@@ -85,19 +78,19 @@
       //判断是否获得通过请求
       isAgree(){
         var self=this;
-/*        axios.get('http://172.20.10.6:7002/provider/response?requestPhoneNum='+this.tableData[0].invitedphone).then(res =>{
-               console.log(res)
+        console.log(this.tableData[0].isAgree)
+        axios.get('http://10.11.32.195:7002/provider/response?requestPhoneNum='+this.tableData[0].invitedphone).then(res =>{
                if(res.data.code==200){
                   self.tableData[0].isAgree="已同意";
                   self.disabled=false
                   window.localStorage.setItem('token',res.data.data.token)
                   window.localStorage.setItem('role',"老板");
                }else if(res.data.code==-200){
-                  this.dataData[0].isAgree="已拒绝"
+                  self.tableData[0].isAgree="已拒绝"
                }else if(res.data.code==444){
-                 this.dataData[0].isAgree="待同意"
+                 self.tableData[0].isAgree="待同意"
                }
-        })*/
+        })
 
       },
       loginIn(){

@@ -46,7 +46,7 @@ export default{
     // console.log(params);
     const req=request({
       method:'get',
-      url:'http://172.20.10.5:8888/Login_Data/GetLogin_NumByAddressAndProvince?address='+params,
+      url:'http://10.11.37.239:8888/Login_Data/GetLogin_NumByAddressAndProvince?address='+params,
       params
     })
     return req

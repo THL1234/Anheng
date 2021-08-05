@@ -12,7 +12,7 @@
         </el-option>
       </el-select>
 
-      <span>市:</span>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>市:</span>
       <el-select v-model="value2" placeholder="选择市" @change="changeCity()">
         <el-option
           v-for="item in option2"
@@ -22,7 +22,7 @@
         </el-option>
       </el-select>
 
-      <span>区:</span>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>区:</span>
       <el-select v-model="value3" placeholder="选择区">
         <el-option
           v-for="item in option3"
@@ -31,7 +31,7 @@
           :value="item.value">
         </el-option>
       </el-select>
-
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>选择时间:</span>
       <el-select v-model="value4" placeholder="请选择想查询的时间范围" style="width: 200px;">
         <el-option
           v-for="item in option4"
@@ -40,14 +40,14 @@
           :value="item.value">
         </el-option>
       </el-select>
-      <el-button type="primary" plain style="margin-left: 10px;" @click="query()">确认查询</el-button>
-      <el-button type="danger" style="float:right;">清空三个月前的数据</el-button>
+      <el-button type="primary" plain style="margin-left: 180px;" @click="query()">确认查询</el-button>
     </div>
 
 
     <el-table
       :data="tableData"
       border
+      stripe
       style="width: 100%;margin-top: 30px;">
       <el-table-column
         prop="name"
@@ -75,7 +75,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <div style="position: absolute;left: 50%;top: 85%;">
+    <div style="position: absolute;left: 50%;top: 90%;">
       <el-pagination
         background
         layout="prev, pager, next"
@@ -114,6 +114,7 @@
         //市下拉框以及区下拉框
         option2:[],
         option3:[],
+        baseUrl:'http://10.11.37.239:8888',
         option4:[
           {
             value: '当天',
@@ -147,7 +148,7 @@
     created(){
       var self=this;
       var address=window.localStorage.getItem('affiliation');
-      axios.get('http://172.20.10.5:8888/Login_Data/GetLogin_DataByAddress_one?page=1&address=浙江省杭州市').then(res=>{
+      axios.get(this.baseUrl+'/Login_Data/GetLogin_DataByAddress_one?page=1&address=浙江省').then(res=>{
         console.log(res.data)
         self.total=res.data.data.pages*10;
         var personalData=res.data.data.login_data;   //赋值表格信息
@@ -240,7 +241,7 @@
         this.value2=''; //选择完新省份后，市名、区名置空一下
         this.value3='';
         var self=this;
-        axios.get('http://172.20.10.5:8888/City/GetCityByString?address='+province).then(res =>{
+        axios.get(this.baseUrl+'/City/GetCityByString?address='+province).then(res =>{
           self.option2=[]
           var cityName=res.data.data.citys;
           for(var i=0;i<cityName.length;i++){
@@ -256,7 +257,7 @@
         var city=this.value2;
         this.value3="";
         var self=this;
-        axios.get('http://172.20.10.5:8888/Area/GetAreaByCityName?address='+city).then(res =>{
+        axios.get(this.baseUrl+'/Area/GetAreaByCityName?address='+city).then(res =>{
           console.log(res.data.data.Area);
           self.option3=[]
           var areaName=res.data.data.Area;
@@ -272,7 +273,7 @@
       //取得每页对应数据
       getData(val){
         var self=this;
-        axios.get('http://172.20.10.5:8888/Login_Data/GetPageAll?page='+val).then(res=>{
+        axios.get(this.baseUrl+'/Login_Data/GetPageAll?page='+val).then(res=>{
           var personalData=res.data.data.login_data;   //赋值
           var datalist=[];
           for(var i=0;i<personalData.length;i++){
@@ -292,9 +293,16 @@
       query(){
         var self=this;
         var time=this.value4;  //取得时间
-        var info=this.value1+';'+this.value2+';'+this.value3;  //取得拼接的省市区字符串
+        if(this.value1.length!=0&&this.value2==0&&this.value3==0){
+          var info=this.value1;
+        }else if(this.value1.length!=0&&this.value2!=0&&this.value3==0){
+          var info=this.value1+';'+this.value2;
+        }else{
+          var info=this.value1+';'+this.value2+';'+this.value3;  //取得拼接的省市区字符串
+        }
         if(time=="不限"){
-          axios.get('http://172.20.10.5:8888/Login_Data/GetLogin_DataByAddress?address='+info+'&page=1').then(res=>{
+          axios.get(this.baseUrl+'/Login_Data/GetLogin_DataByAddress?address='+info+'&page=1').then(res=>{
+            console.log(res.data);
             self.total=res.data.data.pages*10;
             var table=res.data.data.login_data;
             var datalist1=[];
@@ -325,7 +333,6 @@
             console.log(res.data);
 
           })
-
         }
 
       },
